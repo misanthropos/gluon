@@ -1,0 +1,197 @@
+From: Matthias Schiffer <mschiffer@universe-factory.net>
+Date: Sun, 21 Apr 2019 21:36:46 +0200
+Subject: batman-adv: add compat fixes for OpenWrt 18.06
+
+diff --git a/batman-adv/Makefile b/batman-adv/Makefile
+index d88b200514ee1649e21879562bbddfd2d237b25e..6227941f35d817057133e8e05a4d140261a2ea09 100644
+--- a/batman-adv/Makefile
++++ b/batman-adv/Makefile
+@@ -67,6 +67,7 @@ PKG_EXTRA_CFLAGS:= \
+ 
+ NOSTDINC_FLAGS = \
+ 	-I$(PKG_BUILD_DIR)/net/batman-adv \
++	-I$(PKG_BUILD_DIR)/compat-include-18.06/ \
+ 	-I$(STAGING_DIR)/usr/include/mac80211-backport \
+ 	-I$(STAGING_DIR)/usr/include/mac80211-backport/uapi \
+ 	-I$(STAGING_DIR)/usr/include/mac80211 \
+diff --git a/batman-adv/patches/001-fix-openwrt-18.06-build.patch b/batman-adv/patches/001-fix-openwrt-18.06-build.patch
+new file mode 100644
+index 0000000000000000000000000000000000000000..928d22ae9d0f51c5ded9bdc20b18c0ebd1a9f07c
+--- /dev/null
++++ b/batman-adv/patches/001-fix-openwrt-18.06-build.patch
+@@ -0,0 +1,175 @@
++--- /dev/null
+++++ b/compat-include-18.06/net/cfg80211.h
++@@ -0,0 +1,89 @@
+++/* SPDX-License-Identifier: GPL-2.0 */
+++/* Copyright (C) 2007-2019  B.A.T.M.A.N. contributors:
+++ *
+++ * Marek Lindner, Simon Wunderlich
+++ *
+++ * This program is free software; you can redistribute it and/or
+++ * modify it under the terms of version 2 of the GNU General Public
+++ * License as published by the Free Software Foundation.
+++ *
+++ * This program is distributed in the hope that it will be useful, but
+++ * WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+++ * General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU General Public License
+++ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+++ *
+++ * This file contains macros for maintaining compatibility with older versions
+++ * of the Linux kernel.
+++ */
+++
+++#ifndef _NET_BATMAN_ADV_COMPAT_NET_CFG80211_H_
+++#define _NET_BATMAN_ADV_COMPAT_NET_CFG80211_H_
+++
+++#include <linux/version.h>
+++#include_next <net/cfg80211.h>
+++
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 16, 0)
+++
+++static inline int cfg80211_get_station(struct net_device *dev,
+++				       const u8 *mac_addr,
+++				       struct station_info *sinfo)
+++{
+++	pr_warn_once("cfg80211 based throughput metric is only supported with Linux 3.16+\n");
+++	return -ENOENT;
+++}
+++
+++/* The following define substitutes the expected_throughput field with a random
+++ * one existing in the station_info struct. It can be random because due to the
+++ * function above it will never be used. Only needed to make the code compile
+++ */
+++#define expected_throughput filled
+++
+++#endif /* < KERNEL_VERSION(3, 16, 0) */
+++
+++
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 8, 0)
+++
+++#if !IS_ENABLED(CONFIG_CFG80211) && \
+++    LINUX_VERSION_CODE >= KERNEL_VERSION(3, 16, 0)
+++
+++#define cfg80211_get_station(dev, mac_addr, sinfo) \
+++	batadv_cfg80211_get_station(dev, mac_addr, sinfo)
+++
+++static inline int batadv_cfg80211_get_station(struct net_device *dev,
+++					      const u8 *mac_addr,
+++					      struct station_info *sinfo)
+++{
+++	return -ENOENT;
+++}
+++#endif
+++
+++#endif /* < KERNEL_VERSION(4, 8, 0) */
+++
+++
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 18, 0) && IS_ENABLED(CONFIG_CFG80211)
+++
+++/* cfg80211 fix: https://patchwork.kernel.org/patch/10449857/ */
+++static inline int batadv_cfg80211_get_station(struct net_device *dev,
+++					      const u8 *mac_addr,
+++					      struct station_info *sinfo)
+++{
+++	memset(sinfo, 0, sizeof(*sinfo));
+++	return cfg80211_get_station(dev, mac_addr, sinfo);
+++}
+++
+++#define cfg80211_get_station(dev, mac_addr, sinfo) \
+++	batadv_cfg80211_get_station(dev, mac_addr, sinfo)
+++
+++#endif /* < KERNEL_VERSION(4, 18, 0) && IS_ENABLED(CONFIG_CFG80211) */
+++
+++
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 18, 0)
+++
+++#define cfg80211_sinfo_release_content(sinfo)
+++
+++#endif /* < KERNEL_VERSION(4, 18, 0) */
+++
+++#endif	/* _NET_BATMAN_ADV_COMPAT_NET_CFG80211_H_ */
++--- /dev/null
+++++ b/compat-include-18.06/net/genetlink.h
++@@ -0,0 +1,45 @@
+++/* SPDX-License-Identifier: GPL-2.0 */
+++/* Copyright (C) 2007-2019  B.A.T.M.A.N. contributors:
+++ *
+++ * Marek Lindner, Simon Wunderlich
+++ *
+++ * This program is free software; you can redistribute it and/or
+++ * modify it under the terms of version 2 of the GNU General Public
+++ * License as published by the Free Software Foundation.
+++ *
+++ * This program is distributed in the hope that it will be useful, but
+++ * WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+++ * General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU General Public License
+++ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+++ *
+++ * This file contains macros for maintaining compatibility with older versions
+++ * of the Linux kernel.
+++ */
+++
+++#ifndef _NET_BATMAN_ADV_COMPAT_NET_GENETLINK_H_
+++#define _NET_BATMAN_ADV_COMPAT_NET_GENETLINK_H_
+++
+++#include <linux/version.h>
+++#include_next <net/genetlink.h>
+++
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+++
+++static inline
+++void batadv_genl_dump_check_consistent(struct netlink_callback *cb,
+++				       void *user_hdr)
+++{
+++	struct genl_family genl_family = {
+++		.hdrsize = 0,
+++	};
+++
+++	genl_dump_check_consistent(cb, user_hdr, &genl_family);
+++}
+++
+++#define genl_dump_check_consistent batadv_genl_dump_check_consistent
+++
+++#endif /* < KERNEL_VERSION(4, 15, 0) */
+++
+++#endif /* _NET_BATMAN_ADV_COMPAT_NET_GENETLINK_H_ */
++--- /dev/null
+++++ b/compat-include-18.06/linux/build_bug.h
++@@ -0,0 +1,32 @@
+++/* SPDX-License-Identifier: GPL-2.0 */
+++/* Copyright (C) 2007-2019  B.A.T.M.A.N. contributors:
+++ *
+++ * Marek Lindner, Simon Wunderlich
+++ *
+++ * This program is free software; you can redistribute it and/or
+++ * modify it under the terms of version 2 of the GNU General Public
+++ * License as published by the Free Software Foundation.
+++ *
+++ * This program is distributed in the hope that it will be useful, but
+++ * WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+++ * General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU General Public License
+++ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+++ *
+++ * This file contains macros for maintaining compatibility with older versions
+++ * of the Linux kernel.
+++ */
+++
+++#ifndef _NET_BATMAN_ADV_COMPAT_LINUX_BUILD_BUG_H_
+++#define _NET_BATMAN_ADV_COMPAT_LINUX_BUILD_BUG_H_
+++
+++#include <linux/version.h>
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 13, 0)
+++#include_next <linux/build_bug.h>
+++#else
+++#include <linux/bug.h>
+++#endif
+++
+++#endif /* _NET_BATMAN_ADV_COMPAT_LINUX_BUILD_BUG_H_ */
