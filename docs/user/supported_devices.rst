@@ -76,7 +76,7 @@ ar71xx-generic
 * TP-Link
 
   - Archer C5 (v1) [#ath10k]_
-  - Archer C59 (v1) [#80211s]_
+  - Archer C59 (v1)
   - Archer C7 (v2, v4, v5) [#ath10k]_
   - CPE210 (v1.0, v1.1, v2.0, v3.0)
   - CPE220 (v1.1)
@@ -191,8 +191,8 @@ brcm2708-bcm2709
 * RaspberryPi 2
 
 
-ipq40xx-generic [#80211s]_
---------------------------
+ipq40xx-generic
+---------------
 
 * AVM
 
@@ -217,8 +217,8 @@ ipq40xx-generic [#80211s]_
   - NBG6617
   - WRE6606
 
-ipq806x-generic [#80211s]_
---------------------------
+ipq806x-generic
+---------------
 
 * NETGEAR
 
@@ -242,8 +242,8 @@ mpc85xx-p1020
 
   - Panda
 
-ramips-mt7620 [#80211s]_
-------------------------
+ramips-mt7620
+-------------
 
 * GL Innovations
 
@@ -260,11 +260,11 @@ ramips-mt7621
 
 * ASUS
 
-  - RT-AC57U [#80211s]_
+  - RT-AC57U
 
 * D-Link
 
-  - DIR-860L (B1) [#80211s]_
+  - DIR-860L (B1)
 
 * Ubiquiti
 
@@ -273,11 +273,11 @@ ramips-mt7621
 
 * ZBT
 
-  - WG3526-16M [#80211s]_
-  - WG3526-32M [#80211s]_
+  - WG3526-16M
+  - WG3526-32M
 
-ramips-mt76x8 [#80211s]_
-------------------------
+ramips-mt76x8
+-------------
 
 * GL.iNet
 
@@ -299,8 +299,8 @@ ramips-mt76x8 [#80211s]_
 
   - VoCore2
 
-ramips-rt305x [#80211s]_ [#deprecated]_
----------------------------------------
+ramips-rt305x [#deprecated]_
+----------------------------
 
 * A5-V11
 
@@ -352,13 +352,7 @@ Footnotes
   in the next major release of Gluon is doubtful.
 
 .. [#ath10k]
-  Device uses the ath10k WLAN driver. Images are built for 11s by default unless GLUON_WLAN_MESH
-  is set as described in :ref:`getting-started-make-variables`.
-
-.. [#80211s]
-  Device or target does not support IBSS. Images are built by default unless
-  GLUON_WLAN_MESH is explicitly set to something other than *11s*. Targets that
-  are affected as a whole may not be selected for build in this case.
+  Device uses the ath10k WLAN driver.
 
 .. [#avmflash]
   For instructions on how to flash AVM devices, visit https://fritzfla.sh
