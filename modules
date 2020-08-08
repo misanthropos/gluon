@@ -4,7 +4,6 @@ OPENWRT_REPO=https://github.com/openwrt/openwrt.git
 OPENWRT_BRANCH=master
 OPENWRT_COMMIT=1bfba18a3643f2e73c7e7e7ed3cd3a350900a9cd
 
-
 PACKAGES_PACKAGES_REPO=https://github.com/openwrt/packages.git
 PACKAGES_PACKAGES_BRANCH=master
 PACKAGES_PACKAGES_COMMIT=34215c958ee74c9bd151c895a57613cd49434110
