@@ -1,0 +1,25 @@
+From: Richard Fröhning <misanthropos@gmx.de>
+Date: Sun, 30 Jun 2024 12:06:21 +0200
+Subject: add qca9533_tplink_tl-wr841n-nd-mod16-64-v10.dts
+
+diff --git a/target/linux/ath79/dts/qca9533_tplink_tl-wr841n-nd-mod16-64-v10.dts b/target/linux/ath79/dts/qca9533_tplink_tl-wr841n-nd-mod16-64-v10.dts
+new file mode 100644
+index 0000000000000000000000000000000000000000..df74ba12a97e3347dbbee47d48fdff502a169d60
+--- /dev/null
++++ b/target/linux/ath79/dts/qca9533_tplink_tl-wr841n-nd-mod16-64-v10.dts
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++
++#include "qca9533_tplink_tl-wr841-rom16ram64.dtsi"
++
++/ {
++	compatible = "tplink,tl-wr841n-nd-mod16-64-v10", "qca,qca9533";
++	model = "TP-Link TL-WR841N/ND MOD16/64 v10";
++
++	aliases {
++		led-boot = &led_qss;
++		led-failsafe = &led_qss;
++		led-running = &led_qss;
++		led-upgrade = &led_qss;
++	};
++};

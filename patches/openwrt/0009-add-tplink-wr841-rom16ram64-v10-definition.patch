@@ -1,0 +1,24 @@
+From: Richard Fröhning <misanthropos@gmx.de>
+Date: Sun, 30 Jun 2024 11:57:24 +0200
+Subject: add tplink-wr841-rom16ram64-v10 definition
+
+diff --git a/target/linux/ath79/image/generic-tp-link.mk b/target/linux/ath79/image/generic-tp-link.mk
+index cfabc89b8dfe7d3b0d60e0f793e3198907b1c199..1e03235624f2272aafe876dc5a570757bfbecd22 100644
+--- a/target/linux/ath79/image/generic-tp-link.mk
++++ b/target/linux/ath79/image/generic-tp-link.mk
+@@ -829,6 +829,15 @@ define Device/tplink_tl-wr810n-v2
+ endef
+ TARGET_DEVICES += tplink_tl-wr810n-v2
+ 
++define Device/tplink_tl-wr841n-nd-mod16-64-v10
++  $(Device/tplink-16mlzma)
++  SOC := qca9533
++  DEVICE_MODEL := TL-WR841N/ND MOD16/64
++  DEVICE_VARIANT := v10
++  TPLINK_HWID := 0x08411610
++endef
++TARGET_DEVICES += tplink_tl-wr841n-nd-mod16-64-v10
++
+ define Device/tplink_tl-wr841hp-v2
+   $(Device/tplink-8mlzma)
+   SOC := ar9344
