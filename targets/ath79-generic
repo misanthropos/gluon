@@ -521,6 +521,10 @@ device('tp-link-tl-wdr4300-v1', 'tplink_tl-wdr4300-v1')
 
 device('tp-link-tl-wr810n-v1', 'tplink_tl-wr810n-v1')
 
+device('tp-link-tl-wr841n-nd-mod16-64-v9', 'tplink_tl-wr841n-nd-mod16-64-v9')
+
+device('tp-link-tl-wr841n-nd-mod8-64-v10', 'tplink_tl-wr841n-nd-mod8-64-v10')
+
 device('tp-link-tl-wr841n-nd-mod16-64-v10', 'tplink_tl-wr841n-nd-mod16-64-v10')
 
 device('tp-link-tl-wr842n-v3', 'tplink_tl-wr842n-v3', {
