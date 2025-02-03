@@ -15,7 +15,7 @@
 
 void usage() {
 	puts("Usage: gluon-neighbour-info [-h] [-s] [-l] [-c <count>] [-t <sec>] -d <dest> -p <port> -i <if0> -r <request>");
-	puts("  -p <int>         UDP port (default: 1001)");
+	puts("  -p <int>         UDP port (default: 666)");
 	puts("  -d <ip6>         destination address (unicast ip6 or multicast group, e.g. ff02:0:0:0:0:0:2:1001, default: ::1)");
 	puts("  -i <string>      interface, e.g. eth0 ");
 	puts("  -r <string>      request, e.g. nodeinfo");
@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
 	}
 
 	client_addr.sin6_addr = in6addr_loopback;
-	client_addr.sin6_port = htons(1001);
+	client_addr.sin6_port = htons(666);
 	client_addr.sin6_family = AF_INET6;
 
 	opterr = 0;
