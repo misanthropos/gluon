@@ -23,7 +23,7 @@ uci:section('firewall', 'rule',  'mesh_mmfd', {
 uci:section('firewall', 'rule',  'mesh_respondd_mcast_ll', {
 	src = 'mesh',
 	src_ip = 'fe80::/64' ,
-	dest_port = '666',
+	dest_port = '1001',
 	proto = 'udp',
 	target = 'ACCEPT',
 })
@@ -31,7 +31,7 @@ uci:section('firewall', 'rule',  'mesh_respondd_mcast_ll', {
 uci:section('firewall', 'rule',  'mesh_respondd_mcast2', {
 	src = 'mesh',
 	src_ip = site.node_prefix6() or site.prefix6(),
-	dest_port = '666',
+	dest_port = '1001',
 	proto = 'udp',
 	target = 'ACCEPT',
 })
@@ -39,7 +39,7 @@ uci:section('firewall', 'rule',  'mesh_respondd_mcast2', {
 uci:section('firewall', 'rule',  'mmfd_respondd_ll', {
 	src = 'mmfd',
 	src_ip = 'fe80::/64',
-	dest_port = '666',
+	dest_port = '1001',
 	proto = 'udp',
 	target = 'ACCEPT',
 })
@@ -47,7 +47,7 @@ uci:section('firewall', 'rule',  'mmfd_respondd_ll', {
 uci:section('firewall', 'rule',  'mmfd_respondd_mesh', {
 	src = 'mmfd',
 	src_ip = site.node_prefix6() or site.prefix6(),
-	dest_port = '666',
+	dest_port = '1001',
 	proto = 'udp',
 	target = 'ACCEPT',
 })
